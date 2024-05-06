@@ -1,1 +1,35 @@
-
+These are used when which pod have to deployed on which nodes and similarly which nodes should avoid certain pods to be schedule on them , which k8s nodes should become unschedublable for all the pod during the
+backsups or upgrades
+Node Selector is a simple way to constrain pods to nodes with specific labels. It allows you to specify a set of key-value pairs that must match the node's labels for a pod to be scheduled on that node.
+for example lets say a pod running a application which will only works which will run only on arm processor linux machine or with AMD processor or on only windows machine now you want your pod to schedule only on 
+node with arm processor
+so i will put node selector label which will tell the kube scheduler only schedule on node which has the label called which ever mention in the node-name. 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-nginx
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template: 
+    metadata:
+      labels:
+        app: my-app
+    spec: 
+      nodeSelector:
+        node-name: arm-worker
+      containers:
+      - name: nginx-image
+        image: subbu8docker/recharge:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "250m"
+            memory: "300Mi"
+before this i will make sure one or 2 or certain nodes have arm processor and i add label name by 
+kubectl edit node nodename
+go to the labels section and add node-name with label name 
+so, when certain requirements like only windows, linux amd, arm came from developers 1st i add label in node and in pod i will add node selector

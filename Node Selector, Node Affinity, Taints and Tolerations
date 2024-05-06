@@ -29,7 +29,73 @@ spec:
           limits:
             cpu: "250m"
             memory: "300Mi"
+
+spec:
+    containers:
+    - name: my-app
+    image: my-image
+    nodeSelector:
+    disktype: ssd
+
 before this i will make sure one or 2 or certain nodes have arm processor and i add label name by 
 kubectl edit node nodename
 go to the labels section and add node-name with label name 
 so, when certain requirements like only windows, linux amd, arm came from developers 1st i add label in node and in pod i will add node selector
+
+
+Node Affinity it has two options
+1. preffered you are telling scheduller to find exact same node if you find label and if it did not find then schedule it anywhere
+2. required works same like nodeselector if match finds exact same node 100%
+
+Node Affinity is a more expressive way to specify rules about the placement of pods relative to nodes' labels. It allows you to specify rules that apply only if certain conditions are met. Usage: Define 
+nodeAffinity rules in the pod's YAML definition, specifying required and preferred node selectors.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-nginx
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template: 
+    metadata:
+      labels:
+        app: my-app
+    spec: 
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+                matchExpressions:
+                - key: node-name
+                  operator: In
+                  values:
+                  - arm-worker
+      containers:
+      - name: nginx-image
+        image: subbu8docker/recharge:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "250m"
+            memory: "300Mi"
+
+spec:
+    containers:
+    - name: my-app
+    image: my-image
+    affinity:
+    nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+            - key: disktype
+            operator: In
+            values:
+            - ssd
+
+

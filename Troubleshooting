@@ -1,3 +1,11 @@
-Resources sharing
-Allocating resources quota at namespace level
-Allocating resources limits at pod level
+Resources sharing= in cluster before allocating these steps one of the pod is leaking memory and due to that other pod got killed(OOM Killed) you dont know which one is leaking in cluster but by 
+
+Allocating resources quota at namespace level asking developers what is the required amount of resources required for the services,at there end they perfome performance benchmarking and come with idle number and
+by resources quota allocation blast radius came down from cluster level to namespase level
+
+Allocating resources limits to pods by this blast radius came down to pod level by approching developement team and take performance benchmarking of each application or service(micro service) and set up resource 
+limits while deploying the deployment file
+
+OOM(out of memory) Killed issues with pod (kubectl get pods, kubectl describe pod)=OOMkilled error crashloopbackoff 
+once after i set up resource quota and resources limits and identified which pod is leaking memory if it is a java application i logged in to pod and shared the thread dump using kill-3 command, heap dump by
+executing the jstack command shared to developement team and they will understand which thread or part of service is leaking the memory,they perform there analysis and comeup with root cause analysis and fix it

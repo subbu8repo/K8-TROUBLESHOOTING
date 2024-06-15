@@ -1,15 +1,20 @@
 Challenges faced in organisation and in K8
 
-1. esources sharing= in cluster before allocating these steps one of the pod is leaking memory and due to that other pod got killed(OOM Killed) you dont know which one is leaking in cluster but by  
-Allocating resources quota at namespace level asking developers what is the required amount of resources required for the services,at there end they perfome performance benchmarking and come with idle number and
+1. Resources sharing= in cluster before allocating these steps one of the pod is leaking memory and due to that other pod got killed(OOM Killed) you dont know which 
+one is leaking in cluster but by  
+Allocating resources quota at namespace level asking developers what is the required amount of resources required for the services,at there end they perfome 
+performance benchmarking and come with idle number and
 by resources quota allocation blast radius came down from cluster level to namespase level
 
-Allocating resources limits to pods by this blast radius came down to pod level by approching developement team and take performance benchmarking of each application or service(micro service) and set up resource 
+Allocating resources limits to pods by this blast radius came down to pod level by approching developement team and take performance benchmarking of each application
+or service(micro service) and set up resource 
 limits while deploying the deployment file
 
 2. OOM(out of memory) Killed issues with pod (kubectl get pods, kubectl describe pod)=OOM killed error crashloopbackoff 
-once after i set up resource quota and resources limits and identified which pod is leaking memory if it is a java application i logged in to pod and shared the thread dump using kill-3 command, heap dump by
-executing the jstack command shared to developement team and they will understand which thread or part of service is leaking the memory,they perform there analysis and comeup with root cause analysis and fix it
+once after i set up resource quota and resources limits and identified which pod is leaking memory if it is a java application i logged in to pod and shared the 
+thread dump using kill-3 command, heap dump by
+executing the jstack command shared to developement team and they will understand which thread or part of service is leaking the memory,they perform there analysis
+and comeup with root cause analysis and fix it
 
 3. Durings Upgrades like from k8s 1.29 to 1.30
 how i overcome this challenge 
@@ -17,7 +22,9 @@ i will prepare a end to end manual with detailed steps where i have document thi
 how to take backups before performing the upgrades
 how to go through and read the release notes
 divide the steps for control plane commponents and data plane components
-in control plane components i have detailed the steps on how to start with etcd and how to upgrade the kube api server and how to upgrade the version of schecduler what ae the steps and is the order i have noted down
-then in the data plane i have explained how to like you have multiple worker nodes and 1st i pickup and drain one worker node move all pods to other nodes and once the node is empty and make the node unschedulable
+in control plane components i have detailed the steps on how to start with etcd and how to upgrade the kube api server and how to upgrade the version of schecduler 
+what ae the steps and is the order i have noted down
+then in the data plane i have explained how to like you have multiple worker nodes and 1st i pickup and drain one worker node move all pods to other nodes and once 
+the node is empty and make the node unschedulable
 taint the node and update the kubelet to new version and bring back the node and untaint it similarly i do to other nodes.
 
